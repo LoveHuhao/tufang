@@ -2,11 +2,12 @@
   <div class="details">
     <div class="header">
       <span class="logo" @click.prevent="returnBtn">砼之家</span>
+      <div class="return">
+        <img src="../../assets/return.png" class="return-img" v-on:click="back()">
+        <div>混凝土搅拌站报价</div>
+      </div>
     </div>
-    <div class="return">
-      <img src="../../assets/return.png" class="return-img" @click.prevent="returnBtn">
-      <div>混凝土搅拌站报价</div>
-    </div>
+
     <img src="../../assets/close.png" class="detailsImg">
     <div class="label">
       <div class="label-left">
@@ -20,9 +21,9 @@
       <span class="detailedLabel">站型配置清单</span>
     </div>
     <div class="flexBox">
-        <div v-for="(item,index) in detailedList" class="detailedList">
-          <span class="box1">{{item.name}}</span>
-        </div>
+      <div v-for="(item,index) in detailedList" class="detailedList">
+        <span class="box1">{{item.name}}</span>
+      </div>
     </div>
 
 
@@ -30,48 +31,13 @@
 </template>
 
 <script>
+  import {
+    getDetailId
+  } from '../../api/index.js'
   export default {
-    data(){
-      return{
-        detailedList:[{
-          name:'搅拌主机'
-        },{
-          name:'水泥称量系统'
-        },
-        {
-          name:'配料机'
-        },
-        {
-          name:'控制室'
-        },
-        {
-          name:'操作系统'
-        },
-        {
-          name:'电控操作系统'
-        },
-        {
-          name:'螺旋输送机'
-        },
-        {
-          name:'粉煤灰称量系统'
-        },
-        {
-          name:'电机'
-        },
-        {
-          name:'蝶阀'
-        },
-        {
-          name:'皮带'
-        },
-        {
-          name:'矿粉称量系统'
-        },
-        {
-          name:'电机'
-        }
-        ]
+    data() {
+      return {
+        detailedList: []
       }
     },
     methods: {
@@ -81,12 +47,22 @@
         })
         return false
       },
-      inquiry(){
+      back(){
+        this.$router.go(-1);//返回上一层
+      },
+      inquiry() {
         this.$router.push({
-          path:'/Inquiry'
+          path: '/Inquiry'
         })
         return false
       }
+    },
+    created() {
+      var typeId = this.$route.query.id
+      getDetailId(typeId).then(res => {
+        console.log(res.data.data,'res')
+        this.detailedList = res.data.data.mechanicalSystemList
+      })
     }
   }
 </script>
@@ -102,12 +78,17 @@
     background: #327FD7;
     color: #FFFFFF;
     line-height: 44px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
   }
 
   .logo {
     font-size: 28px;
     padding-left: 17px;
     font-weight: 900;
+
   }
 
   .return {
@@ -116,6 +97,8 @@
     text-align: center;
     font-size: 18px;
     font-weight: bold;
+    background: #FFFFFF;
+    color: #000000;
   }
 
   .return-img {
@@ -129,6 +112,7 @@
   .detailsImg {
     width: 375px;
     height: 185px;
+    margin-top: 90px;
   }
 
   .label {
@@ -168,24 +152,28 @@
     font-size: 16px;
     font-weight: bold;
   }
-  .detailedLabel{
+
+  .detailedLabel {
     display: inline-block;
     margin-left: 10px;
   }
-  .flexBox{
+
+  .flexBox {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
     margin-bottom: 100px;
   }
-  .detailedList{
+
+  .detailedList {
     width: 49%;
     line-height: 60px;
     border: 1px solid #BBBBBB;
     margin-left: 1px;
     text-align: center;
   }
-  .box1{
+
+  .box1 {
     border: 1px solid #BBBBBB;
     padding: 10px;
   }

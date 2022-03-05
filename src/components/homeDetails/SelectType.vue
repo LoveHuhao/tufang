@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="return">
-      <img src="../assets/return.png" class="return-img" @click.prevent="returnBtn">
+      <img src="../../assets/return.png" class="return-img" @click.prevent="returnBtn">
       <div>选择站型</div>
     </div>
     <div class="typeBox" >
@@ -50,7 +50,7 @@
        })
        return false
      }
-     
+
    }
   }
 </script>

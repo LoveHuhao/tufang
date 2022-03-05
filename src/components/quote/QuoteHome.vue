@@ -1,7 +1,7 @@
 <template>
   <div class="quote">
     <div class="header">
-      <span class="logo"  @click.prevent="returnBtn()">砼之家</span>
+      <span class="logo" @click.prevent="returnBtn()">砼之家</span>
       <span class="quoteName">报价库</span>
     </div>
     <div class="return">
@@ -26,6 +26,9 @@
 </template>
 
 <script>
+  import {
+    queryMechanicalGroup
+  } from '../../api/index.js'
   export default {
     data() {
       return {
@@ -71,8 +74,7 @@
                 text: '800站',
               }
             ]
-          },
-          {
+          },{
             name: '沥青搅拌站',
             type: '3',
             description: [{
@@ -92,7 +94,29 @@
               }
             ]
           }
-        ]
+        ],
+        quoteList: {
+          code: "",
+          data: {
+            additionalProp1: [{
+              modelId: 0,
+              modelName: "",
+              pic: ""
+            }],
+            additionalProp2: [{
+              modelId: 0,
+              modelName: "",
+              pic: ""
+            }],
+            additionalProp3: [{
+              modelId: 0,
+              modelName: "",
+              pic: ""
+            }]
+          },
+          message: "",
+          success: true
+        }
       }
     },
     methods: {
@@ -102,12 +126,17 @@
         })
         return false
       },
-      details(){
+      details() {
         this.$router.push({
-          path:'/QuoteDetails'
+          path: '/QuoteDetails'
         })
         return false
       }
+    },
+    created() {
+      queryMechanicalGroup(this.quoteList).then(res => {
+        console.log(res.data)
+      })
     }
 
   }

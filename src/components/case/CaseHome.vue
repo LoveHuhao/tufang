@@ -8,11 +8,7 @@
       <img src="../../../../tufang-vue/build/logo.png" class="img">
     </div>
     <div class="text">
-      <span>
-        吉林正处在振兴发展的关键时期，基础设施建设可谓是吉林振兴的“硬件”，吉林振兴迈向新的征程，良好基础设施是最“硬”的支撑，吉林要振兴，基建必先行。近年来，以吉林省高速公路集团有限公司为代表的大型国有独资集团以推动吉林全面振兴、全方位振兴为己任，使吉林省的交通等基础设施得到了充足的发展，激发了吉林省经济发展的活力。
-        吉林省高速公路集团有限公司（以下简称吉高集团）是经吉林省政府批准组建的大型国有企业集团、重点功能类企业。紧紧抓住建设交通强国、打造交通强省的重大战略机遇，2020年旗下吉林省交通实业发展有限公司、吉林省路桥工程（集团）有限公司在综合对比多个主流厂家和实地应用案例后，南方路机设备智能、环保、稳定、区域化服务快速优良、建站咨询服务一体的专业解决方案得到了客户的认可和信赖，接连购置了三套南方路机沥青搅拌站。
-        吉林省交通实业发展有限公司是吉高集团下属的全资子公司，主要从事交通安全设施等各类工程材料的生产、经销以及公路、桥梁质量检测等业务，目前拥有南方路机GLBR4000+GLBR5000（预留再生框架）两套沥青搅拌设备，目前主要承担园区沥青路面混合料的搅拌生产，经过持续近半年的运营生产，南方路机GLBR型沥青混合料先进的设备结构，原再生一体机的设计，优越的沥青混凝土再生功能，得到了客户充分的肯定。
-      </span>
+      <span style="text-indent: 32px;"> {{details.content}}</span>
     </div>
     <div class="bottomBox">
       <div class="box-left">
@@ -25,9 +21,12 @@
         </div>
         <div class="quote">厂家报价：xx万元——xx万元</div>
         <div class="ask" @click.prevent="ask">询底价</div>
+
+
+
         <div v-show="boxshou">
-          <div class="boxshous" @click.prevent="ask"></div>
-          <div class="askBox">
+          <div class="boxshous" @click.prevent="ask" :style="{height:shouHeight}"></div>
+          <div class="askBox" :style="{bottom:boxHeight}">
             <div class="boxTop">
               <span>免费获取最低价</span>
               <img src="../../assets/close.png" @click.prevent="ask" class="close">
@@ -64,10 +63,16 @@
 </template>
 
 <script>
+  import {
+    getPageDetailsId
+  } from '../../api/index.js'
   export default {
     data() {
       return {
-        boxshou: false
+        boxshou: false,
+        details: {},
+        shouHeight: 0,
+        boxHeight: 0
       }
     },
     methods: {
@@ -80,7 +85,22 @@
       },
       ask() {
         this.boxshou = !this.boxshou
+        console.log(document.body.clientHeight)
+        let boxHeight = document.body.clientHeight - document.body.clientHeight - document.body.clientHeight + 680 +
+          'px'
+        let shouHeight = document.body.clientHeight + 130 + 'px'
+        console.log(boxHeight)
+        this.boxHeight = boxHeight
+        this.shouHeight = shouHeight
       }
+    },
+    created() {
+      let typeId = this.$route.query.id
+      getPageDetailsId(typeId).then(res => {
+        console.log(res.data.data, 'res')
+        this.details = res.data.data
+      })
+
     }
   }
 </script>
@@ -93,6 +113,10 @@
   }
 
   .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     background: #327FD7;
     color: #FFFFFF;
     line-height: 44px;
@@ -111,7 +135,7 @@
   }
 
   .imgBox {
-    margin: 4px 5px 15px 3px;
+    margin: 50px 5px 15px 3px;
   }
 
   .img {
@@ -131,6 +155,7 @@
     border: 1px solid #BBBBBB;
     height: 132px;
     display: flex;
+    margin-bottom: 80px;
   }
 
   .box-left {
@@ -263,7 +288,8 @@
   .region {
     display: flex;
   }
-  .button{
+
+  .button {
     width: 98.5%;
     line-height: 47px;
     text-align: center;
@@ -273,7 +299,8 @@
     margin-left: 2px;
     margin-top: 9px;
   }
-  .cue{
+
+  .cue {
     display: inline-block;
     color: rgba(16, 16, 16, 100);
     margin-left: 66px;

@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
-import CaseHome from '@/components/case/CaseHome.vue'
+import CaseHome from '@/components/case/CaseHome'
 import QuoteHome from '@/components/quote/QuoteHome'
-import QuoteDetails from '@/components/quote/Details.vue'
-import Details from '@/components/Details'
+import QuoteDetails from '@/components/quote/Details'
+import Details from '@/components/homeDetails/Details'
 import Category from '@/components/category/Category'
 import CategoryDetails from '@/components/category/Details'
 import Inquiry from '@/components/category/Inquiry'
-import SelectType from '@/components/SelectType.vue'
+import SelectType from '@/components/homeDetails/SelectType'
 
 Vue.use(Router)
 
@@ -56,7 +56,7 @@ export default new Router({
       path: '/SelectType',
       name: 'SelectType',
       component: SelectType
-    }
+    },
 
   ]
 })

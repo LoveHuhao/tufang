@@ -9,7 +9,7 @@
       <span>混凝土搅拌站报价</span>
       <span>S30站</span>
     </div>
-    <div class="brand">
+    <div class="brand" @click.prevent="ask">
       <span class="brandBtn">品牌</span>
     </div>
     <div class="line"></div>
@@ -36,12 +36,30 @@
         </div>
       </div>
     </div>
+    <div v-show="boxshou">
+      <div class="boxshous" @click.prevent="ask"></div>
+      <div class="askBox">
+        <div class="boxTop">
+          <img src="../../assets/return.png" class="boxImg" @click.prevent="ask">
+          <span class="boxQuote">品牌</span>
+        </div>
+        <div class="quoteList" v-for="(item,index) in quoteList">
+          {{item}}
+        </div>
+      </div>
+    </div>
   </div>
 
 </template>
 
 <script>
   export default {
+    data() {
+      return {
+        boxshou: false,
+        quoteList:['三力','三力','三力','三力'],
+      }
+    },
     methods: {
       returnBtn() {
         this.$router.push({
@@ -49,11 +67,14 @@
         })
         return false
       },
-      inquiry(){
+      inquiry() {
         this.$router.push({
-          path:'/Inquiry'
+          path: '/Inquiry'
         })
         return false
+      },
+      ask() {
+        this.boxshou = !this.boxshou
       }
     }
   }
@@ -154,5 +175,45 @@
   .base {
     display: inline-block;
     padding: 5px;
+  }
+
+  .boxshous {
+    background: #BBBBBB;
+    opacity: 0.4;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .askBox {
+    background: #FFFFFF;
+    width: 254px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .boxTop{
+    display: flex;
+
+  }
+  .boxImg{
+    width: 15px;
+    height: 15px;
+    margin: 7px;
+  }
+  .boxQuote{
+    display: inline-block;
+    margin-left: 100px;
+    line-height: 30px;
+  }
+  .quoteList{
+    border-top: 1px solid #BBBBBB;
+    border-bottom: 1px solid #BBBBBB;
+    line-height: 40px;
+    padding-left: 7px;
   }
 </style>

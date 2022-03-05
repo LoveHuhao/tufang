@@ -11,24 +11,30 @@
         <router-link to="/QuoteHome" class="router-link">报价库</router-link>
       </div>
       <div class="box-li tab1-right">
-        <router-link to="/CaseHome" class="router-link">案例中心</router-link>
+        <router-link :to="{path:'/CaseHome',query:{id:1}}" class="router-link">案例中心</router-link>
       </div>
     </div>
     <div class="header-tab2 box">
-      <div class="tab2-left box-li">
-        按类别
-      </div>
-      <div class="tab2-middle box-li">
-        按价格
-      </div>
-      <div class="tab2-right box-li ">
-        按品牌
+      <div class="tab2-left box-li" v-for="(item,index) in catList" >
+        <div @click="catClick(index)" :status='index'>
+          <span>{{item}}</span>
+        </div>
       </div>
     </div>
     <!-- 按类型 -->
-    <div class="header-tab3 box">
+    <div class="header-tab3 box" v-if="cur === 0">
+      <div class="category" v-for="(item,index) in categoryList" :key="item.id" @click.prevent="CategoryDetails">
+        <div class="box-li"><span class="textBorder">{{item}}</span></div>
+      </div>
+    </div>
+    <div class="header-tab3 box" v-if="cur === 1">
       <div class="category" v-for="(item,index) in priceList" :key="item.id" @click.prevent="CategoryDetails">
         <div class="box-li"><span class="textBorder">{{item.label}}</span></div>
+      </div>
+    </div>
+    <div class="header-tab3 box" v-if="cur === 2">
+      <div class="category" v-for="(item,index) in brandList" :key="item.id" @click.prevent="CategoryDetails">
+        <div class="box-li"><span class="textBorder">{{item}}</span></div>
       </div>
     </div>
     <!-- 轮播图 -->
@@ -41,20 +47,22 @@
       </swiper>
     </div>
     <!-- 内容 -->
-    <div class="content" v-for="(item,index) in contentList" :key="item.id">
-      <div class="contentBox" @click.prevent="Details">
+    <div class="content" v-for="(item,index) in contentLists" :key="item.id">
+      <div class="contentBox" @click.prevent="Details(item.id)">
         <!-- 跳转详情 -->
         <div class="">
           <img class="left-img" :src="item.imgUrl">
         </div>
         <div class="right-center">
           <div class="top-center">
-            <span>{{item.text}}</span>
+            <span>{{item.title.length>30 ? item.title.substring(0,30)+'...' :item.title}}</span>
           </div>
           <div class="bottom-label">
-            <span>{{item.label}}</span>
+            <span></span>
+            <!-- 专家测试 -->
           </div>
         </div>
+
       </div>
     </div>
 
@@ -63,9 +71,8 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import {
-    getMxInFoPage,getList
+    getMxInFoPage
   } from '../api/index'
 
   export default {
@@ -81,6 +88,9 @@
           pageNo: 0,
           pageSize: 0
         },
+        cur:0,
+        catList: ['按类别', '按价格', '按品牌'],
+        categoryList:['混凝土搅拌机', '稳定土搅拌机', '沥青搅拌机'],
         swiperList: [{
             id: '001',
             imgUrl: '//imgs.qunarzz.com/vs_ceph_vcimg/280673be5655fc91ce24ba605c62fe07.jpeg'
@@ -92,43 +102,6 @@
           {
             id: '003',
             imgUrl: '//imgs.qunarzz.com/vs_ceph_vcimg/5be2601d1f921f166646b817459a2727.jpeg'
-          }
-        ],
-        contentList: [{
-            id: '001',
-            imgUrl: '//imgs.qunarzz.com/vs_ceph_vcimg/280673be5655fc91ce24ba605c62fe07.jpeg',
-            text: '混凝土90站，如何工作才能让效能达到最高？',
-            label: '专家测试'
-          },
-          {
-            id: '002',
-            imgUrl: '//imgs.qunarzz.com/vs_ceph_vcimg/5be2601d1f921f166646b817459a2727.jpeg',
-            text: '混凝土90站，如何工作才能让效能达到最高？',
-            label: '专家测试'
-          },
-          {
-            id: '003',
-            imgUrl: '//imgs.qunarzz.com/vs_ceph_vcimg/280673be5655fc91ce24ba605c62fe07.jpeg',
-            text: '混凝土90站，如何工作才能让效能达到最高？',
-            label: '专家测试'
-          },
-          {
-            id: '004',
-            imgUrl: '//imgs.qunarzz.com/vs_ceph_vcimg/5be2601d1f921f166646b817459a2727.jpeg',
-            text: '混凝土90站，如何工作才能让效能达到最高？',
-            label: '专家测试'
-          },
-          {
-            id: '005',
-            imgUrl: '//imgs.qunarzz.com/vs_ceph_vcimg/280673be5655fc91ce24ba605c62fe07.jpeg',
-            text: '混凝土90站，阿萨德奥德赛打大撒旦阿萨德撒旦阿萨德撒？',
-            label: '本人亲测'
-          },
-          {
-            id: '006',
-            imgUrl: '//imgs.qunarzz.com/vs_ceph_vcimg/5be2601d1f921f166646b817459a2727.jpeg',
-            text: '混凝土90站，阿萨德奥德赛打大撒旦阿萨德撒旦阿萨德撒？',
-            label: '本人亲测'
           }
         ],
         priceList: [{
@@ -156,25 +129,15 @@
             label: '更多'
           },
         ],
-        categoryList: [{
-            id: '001',
-            label: '混凝土搅拌站'
-          },
-          {
-            id: '002',
-            label: '稳定土搅拌站'
-          },
-          {
-            id: '003',
-            label: '沥青搅拌站'
-          }
-        ]
+        brandList:['三力'],
+        contentLists:[],
       }
     },
     methods: {
-      Details() {
+      Details(id) {
         this.$router.push({
-          path: '/Details'
+          path: '/Details',
+          query:{id}
         })
         return false
       },
@@ -183,11 +146,16 @@
           path: '/Category'
         })
         return false
+      },
+      catClick(index) {
+        // Tab点击
+        this.cur = index
       }
     },
     created() {
-      getList(this.paramsData).then(res => {
-        console.log(res, 'res')
+      getMxInFoPage(this.paramsData).then(res => {
+        // console.log(res.data.data.records, 'res')
+        this.contentLists = res.data.data.records
       })
 
     },
@@ -199,6 +167,15 @@
 <style scoped>
   .wrapper>>>.swiper-pagination-bullet {
     background: #fff !important // 样式进行穿透
+  }
+
+  [status='1'] {
+    text-align: center;
+    padding-right: 15px;
+  }
+  [status='2'] {
+    text-align: right;
+    padding-right: 20px;
   }
 
   .wrapper {
@@ -284,7 +261,7 @@
 
   .header-tab3 {
     margin-top: 8px;
-    height: 92px;
+    /* height: 92px; */
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
@@ -293,6 +270,7 @@
   .category {
     margin-left: 2%;
     width: 31%;
+    margin-bottom: 10px;
   }
 
   .textBorder {

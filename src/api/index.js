@@ -5,24 +5,26 @@ import {
 } from "./request.js"
 import axios from 'axios'
 
-// 报价库列表详情
+// 类别列表
 export const getList = (data) => {
   return axios({
     method: "post",
     url: "/mechanical/list",
-    data:data
+    data
   })
 }
-// 报价库列表
+// 类别列表详情
 export const getDetailId = (id) => {
   return axios({
     method: "post",
     url: "/mechanical/getDetailId",
-    id
+    params:{
+      id
+    }
   })
 }
 
-//获取分组
+// 报价库
 export const queryMechanicalGroup = (data) => {
   return axios({
     method: "post",
@@ -38,11 +40,14 @@ export const getMxInFoPage = (data) => {
     data
   })
 }
+
 // 资讯列表详情
-export const getPageDetails = (id) => {
+export const getPageDetailsId = (id) => {
   return axios({
     method: "post",
     url: "/mxInfo/getById",
-    id
+    params:{
+      id
+    }
   })
 }

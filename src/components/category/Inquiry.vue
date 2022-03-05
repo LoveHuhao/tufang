@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="return">
-      <img src="../../assets/return.png" class="return-img" @click.prevent="returnBtn">
+      <img src="../../assets/return.png" class="return-img" v-on:click="back()">
       <div>询底价</div>
     </div>
     <div class="flexBox">
@@ -41,6 +41,11 @@
 <script>
   export default {
     name: 'Inquiry',
+    data(){
+      return{
+
+      }
+    },
     methods:{
       returnBtn(){
         this.$router.push({
@@ -53,6 +58,9 @@
           path:'/SelectType'
         })
         return false
+      },
+      back(){
+        this.$router.go(-1);//返回上一层
       }
     }
   }
