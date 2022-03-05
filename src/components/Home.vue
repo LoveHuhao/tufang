@@ -85,8 +85,8 @@
           autoplay: 3000
         },
         paramsData: {
-          pageNo: 0,
-          pageSize: 0
+          pageNo: 1,
+          pageSize: 2
         },
         cur:0,
         catList: ['按类别', '按价格', '按品牌'],
@@ -154,7 +154,7 @@
     },
     created() {
       getMxInFoPage(this.paramsData).then(res => {
-        // console.log(res.data.data.records, 'res')
+        console.log(res.data.data, 'res')
         this.contentLists = res.data.data.records
       })
 
