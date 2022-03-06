@@ -86,7 +86,7 @@
         },
         paramsData: {
           pageNo: 1,
-          pageSize: 2
+          pageSize: 10
         },
         cur:0,
         catList: ['按类别', '按价格', '按品牌'],
